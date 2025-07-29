@@ -61,8 +61,7 @@ export default function routes(fastify:FastifyInstance ) {
 
     fastify.delete('/delete-moments:/id',{preHandler: authAuthetication}, async (request:FastifyRequest, reply:FastifyReply) => {
         return new DeleteMomentsControler().handle(request,reply)
-    })
-
+    });
     
 
 
