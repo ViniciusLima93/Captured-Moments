@@ -10,6 +10,8 @@ import { UpdateMomentsController } from "./controller/Moments/UpdateMomentContro
 import { AiTextController } from "./controller/AI/AiTextController";
 import { upload } from "./config/multer";
 import { UploadFileController } from "./controller/Uploads/UploadFileController";
+import { DeleteFileController } from "./controller/Uploads/DeleteUploadController";
+import { DeleteMomentsControler } from "./controller/Moments/DeleteMomentsController";
 
 
 
@@ -52,7 +54,14 @@ export default function routes(fastify:FastifyInstance ) {
     fastify.post('/upload-image',  {preHandler: upload.single("image")}, async (request:FastifyRequest, reply:FastifyReply) => {
         return new UploadFileController().handle(request, reply);
     });
-     
+    
+     fastify.delete('/delete-image',  {preHandler: upload.single("image")}, async (request:FastifyRequest, reply:FastifyReply) => {
+        return new DeleteFileController().handle(request, reply)
+    });
+
+    fastify.delete('/delete-moments:/id',{preHandler: authAuthetication}, async (request:FastifyRequest, reply:FastifyReply) => {
+        return new DeleteMomentsControler().handle(request,reply)
+    })
 
     
 
