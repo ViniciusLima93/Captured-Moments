@@ -12,55 +12,75 @@ import { upload } from "./config/multer";
 import { UploadFileController } from "./controller/Uploads/UploadFileController";
 import { DeleteFileController } from "./controller/Uploads/DeleteUploadController";
 import { DeleteMomentsControler } from "./controller/Moments/DeleteMomentsController";
+import { UpdateFavoriteMomentsController } from "./controller/Moments/UpdateFavoriteMomentsController";
 
 
 
 export default function routes(fastify:FastifyInstance ) {
-   
-    
-    fastify.get('/get-user', {preHandler: authAuthetication}, (request: FastifyRequest, reply: FastifyReply) => {
-        return new GetUserController().handle(request,reply);
-    })
-    
+
+    //Auth to create a user
     fastify.post('/create-account', (request:FastifyRequest, reply:FastifyReply) => {
         return new CreateUserController().handle(request,reply)
     });
 
+    //Login  
     fastify.post('/login', (request:FastifyRequest, reply:FastifyReply) => {
         return new LoginUserController().handle(request,reply)
     });
+   
+    //LOOK UP A user
+    fastify.get('/get-user', {preHandler: authAuthetication}, (request: FastifyRequest, reply: FastifyReply) => {
+        return new GetUserController().handle(request,reply);
+    });
+     
 
+    //To create a moment registered
     fastify.post('/add-registered-moment',{preHandler: authAuthetication}, (request: FastifyRequest, reply: FastifyReply) => {
         return new AddMomentContoller().handle(request,reply)    
     });
 
+    //To view all moments
     fastify.get('/get-all-moments',{preHandler: authAuthetication},(request:FastifyRequest, reply:FastifyReply) => {
         return new GetAllMomentsController().handle(request,reply)
     });
 
+    //Search by title, story and Visited location 
     fastify.get('/search', {preHandler: authAuthetication}, (request:FastifyRequest, reply: FastifyReply) => {
         return new SearchedMomentsController().handle(request, reply)
     });
 
+    //edit moments
     fastify.put('/edit-moments/:id',{preHandler: authAuthetication}, async (request:FastifyRequest, reply: FastifyReply) => {
         return new UpdateMomentsController().handle(request,reply);    
     });
 
+    //IA
     fastify.post('/ia', async (request: FastifyRequest, reply:FastifyReply) => {
         return new AiTextController().handle(request,reply);
 
     });
 
+
+    // to upload a image
     fastify.post('/upload-image',  {preHandler: upload.single("image")}, async (request:FastifyRequest, reply:FastifyReply) => {
         return new UploadFileController().handle(request, reply);
     });
     
+    // to delete a image
      fastify.delete('/delete-image',  {preHandler: upload.single("image")}, async (request:FastifyRequest, reply:FastifyReply) => {
         return new DeleteFileController().handle(request, reply)
     });
 
+
+    //delete moment
     fastify.delete('/delete-moments:/id',{preHandler: authAuthetication}, async (request:FastifyRequest, reply:FastifyReply) => {
         return new DeleteMomentsControler().handle(request,reply)
+    });
+
+    //update favoorite moment
+    fastify.put('/update-is-favorite/:id',{preHandler: authAuthetication}, async (request:FastifyRequest, reply:FastifyReply) => {
+       return new UpdateFavoriteMomentsController().handle(request,reply)
+    
     });
     
 
